@@ -3,6 +3,50 @@
 This PHP library provides you with tools needed to interact with [JustClick API][jc-api-docs].
 It uses [Guzzle][guzzle] to send HTTP requests.
 
+## Usage
+
+```php
+use Guzzle\Http\Client as HttpClient;
+use Betsol\JustClick\Client;
+use Betsol\JustClick\Entity\Order;
+
+// Creating a Guzzle client.
+$httpClient = new HttpClient;
+
+// JustClick client configuration.
+$config = [
+    'username' => 'login',
+    'secret' => '8b3e4e1f8236b6683235222d3034b317',
+];
+
+// Creating JustClick client.
+$justClickClient = new Client($config, $httpClient);
+
+// Creating a new order.
+$order = new Order;
+
+// Adding products to the order.
+$order->addProduct('some-product');
+$order->addProduct('another-product');
+
+// You can specify custom price for a product.
+$order->addProduct('yet-another-product', 700);
+
+// Adding different fields to the order.
+$order->setEmail('email@example.com');
+$order->setNameFirst('Slava');
+$order->setNameLast('Fomin');
+$order->setCountry('Russia');
+$order->setCity('Moscow');
+$order->setAddress('Some address here');
+
+// Issuing a query to JustClick API.
+$response = $justClickClient->createOrder($order);
+
+// Handling response.
+$orderId = (int) $response['bill_id'];
+```
+
 ## License
 
 The MIT License (MIT)
